@@ -1,0 +1,125 @@
+--- Job 2020_DP_Tetour_Daniel_177786.gms Start 04/25/21 16:54:31 30.1.0 re01a340 WEX-WEI x86 64bit/MS Windows
+--- GAMS Parameters defined
+    Input M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\tetour\original\2020_DP_Tetour_Daniel_177786.gms
+    PageSize 0
+    ScrDir M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\tetour\original\225a\
+    SysDir M:\PROGRAMY\gams30.1\
+    LogOption 3
+    ErrMsg 1
+    ErrorLog 99
+    IDE 1
+    LstTitleLeftAligned 1
+GAMS 30.1.0   Copyright (C) 1987-2020 GAMS Development. All rights reserved
+Licensee: Medium MUD - 10 User License                   S170901:0725AO-GEN
+          Brno University of Technology, Dept. of Process and EnviroDC13506
+--- Starting compilation
+--- 2020_DP_Tetour_Daniel_177786.gms(366) 3 Mb
+--- Starting execution: elapsed 0:00:00.020
+--- 2020_DP_Tetour_Daniel_177786.gms(282) 4 Mb
+--- Generating MIP model OptimTepla
+--- 2020_DP_Tetour_Daniel_177786.gms(284) 4 Mb
+---   750 rows  1,191 columns  3,824 non-zeroes
+---   294 discrete-columns
+--- Executing CPLEX: elapsed 0:00:00.060
+IBM ILOG CPLEX   30.1.0 re01a340 Released Jan 10, 2020 WEI x86 64bit/MS Window
+--- GAMS/Cplex licensed for continuous and discrete problems.
+Cplex 12.10.0.0
+Reading data...
+Starting Cplex...
+Space for names approximately 0.04 Mb
+Use option 'names no' to turn use of names off
+Version identifier: 12.10.0.0 | 2019-11-26 | 843d4de2ae
+CPXPARAM_Advance                                 0
+CPXPARAM_Threads                                 1
+CPXPARAM_Parallel                                1
+CPXPARAM_MIP_Display                             4
+CPXPARAM_Simplex_Limits_Iterations               2000000000
+CPXPARAM_TimeLimit                               1000
+CPXPARAM_Tune_TimeLimit                          200
+CPXPARAM_MIP_Tolerances_AbsMIPGap                0
+CPXPARAM_MIP_Tolerances_MIPGap                   0.10000000000000001
+CPXPARAM_WorkDir                                 "M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\tetour\original\225a\"
+Tried aggregator 1 time.
+MIP Presolve eliminated 357 rows and 319 columns.
+MIP Presolve modified 294 coefficients.
+Reduced MIP has 393 rows, 872 columns, and 2220 nonzeros.
+Reduced MIP has 98 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.02 sec. (3.02 ticks)
+Found incumbent of value 38458.949131 after 0.05 sec. (4.15 ticks)
+Probing time = 0.00 sec. (0.08 ticks)
+Tried aggregator 1 time.
+Detecting symmetries...
+MIP Presolve eliminated 196 rows and 384 columns.
+Reduced MIP has 197 rows, 488 columns, and 1068 nonzeros.
+Reduced MIP has 98 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.02 sec. (1.61 ticks)
+Probing time = 0.00 sec. (0.05 ticks)
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: none, using 1 thread.
+Tried aggregator 1 time.
+No LP presolve or aggregator reductions.
+Presolve time = 0.00 sec. (0.17 ticks)
+Initializing dual steep norms . . .
+Iteration log . . .
+Iteration:     1   Dual objective     =        109988.279321
+Iteration:    62   Dual objective     =         81693.926027
+Iteration:   125   Dual objective     =         81263.009573
+Root relaxation solution time = 0.03 sec. (1.16 ticks)
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+*     0+    0                        38458.9491   111578.0491           190.12%
+Found incumbent of value 38458.949131 after 0.09 sec. (7.54 ticks)
+      0     0    81255.3654    37    38458.9491    81255.3654      149  111.28%
+      0     0    81134.9261    37    38458.9491     Cuts: 114      254  110.97%
+*     0+    0                        80238.8816    81134.9261             1.12%
+Found incumbent of value 80238.881583 after 0.11 sec. (12.94 ticks)
+Implied bound cuts applied:  8
+Flow cuts applied:  29
+Mixed integer rounding cuts applied:  15
+Gomory fractional cuts applied:  15
+Root node processing (before b&c):
+  Real time             =    0.11 sec. (12.99 ticks)
+Sequential b&c:
+  Real time             =    0.00 sec. (0.00 ticks)
+                          ------------
+Total (root+branch&cut) =    0.11 sec. (12.99 ticks)
+MIP status(102): integer optimal, tolerance
+Cplex Time: 0.11sec (det. 12.99 ticks)
+Fixing integer variables, and solving final LP...
+Version identifier: 12.10.0.0 | 2019-11-26 | 843d4de2ae
+CPXPARAM_Advance                                 2
+CPXPARAM_Threads                                 1
+CPXPARAM_Parallel                                1
+CPXPARAM_MIP_Display                             4
+CPXPARAM_Simplex_Limits_Iterations               2000000000
+CPXPARAM_TimeLimit                               1000
+CPXPARAM_Tune_TimeLimit                          200
+CPXPARAM_MIP_Tolerances_AbsMIPGap                0
+CPXPARAM_MIP_Tolerances_MIPGap                   0.10000000000000001
+CPXPARAM_WorkDir                                 "M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\tetour\original\225a\"
+Tried aggregator 1 time.
+LP Presolve eliminated 373 rows and 744 columns.
+Aggregator did 307 substitutions.
+Reduced LP has 70 rows, 140 columns, and 207 nonzeros.
+Presolve time = 0.00 sec. (0.78 ticks)
+Initializing dual steep norms . . .
+Iteration log . . .
+Iteration:     1   Dual objective     =         88729.759874
+Fixed MIP status(1): optimal
+Cplex Time: 0.00sec (det. 1.36 ticks)
+Solution satisfies tolerances.
+MIP Solution:        80238.881583    (254 iterations, 0 nodes)
+Final Solve:         80238.881583    (30 iterations)
+Best possible:       81134.926079
+Absolute gap:          896.044497
+Relative gap:            0.011044
+--- Restarting execution
+--- 2020_DP_Tetour_Daniel_177786.gms(284) 2 Mb
+--- Reading solution for model OptimTepla
+--- Executing after solve: elapsed 0:00:00.480
+--- 2020_DP_Tetour_Daniel_177786.gms(360) 3 Mb
+--- Putfile out1 M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\tetour\original\vysledky.txt
+*** Status: Normal completion
+--- Job 2020_DP_Tetour_Daniel_177786.gms Stop 04/25/21 16:54:31 elapsed 0:00:00.486
+

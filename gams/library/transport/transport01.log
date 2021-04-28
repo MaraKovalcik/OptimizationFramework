@@ -1,0 +1,24 @@
+--- Job transport01.gms Start 10/27/20 10:49:40 30.1.0 re01a340 WEX-WEI x86 64bit/MS Windows
+--- GAMS Parameters defined
+    Input M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\transport01.gms
+    PageSize 0
+    ScrDir M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\225a\
+    SysDir M:\PROGRAMY\gams30.1\
+    LogOption 3
+    ErrMsg 1
+    ErrorLog 99
+    IDE 1
+    LstTitleLeftAligned 1
+GAMS 30.1.0   Copyright (C) 1987-2020 GAMS Development. All rights reserved
+Licensee: Medium MUD - 10 User License                   S170901:0725AO-GEN
+          Brno University of Technology, Dept. of Process and EnviroDC13506
+--- Starting compilation
+***
+*** Abort 'no include file name for data file provided'
+***
+*** Error 343 in M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\transport01.gms
+    Abort triggered by above statement
+--- transport01.gms(23) 3 Mb 1 Error
+*** Status: Compilation error(s)
+--- Job transport01.gms Stop 10/27/20 10:49:40 elapsed 0:00:00.007
+

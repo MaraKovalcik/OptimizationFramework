@@ -1,0 +1,40 @@
+--- Job transport02.gms Start 11/17/20 14:30:14 32.2.0 rc62c018 WEX-WEI x86 64bit/MS Windows
+--- Applying:
+    M:\PROGRAMY\gams32\gmsprmNT.txt
+--- GAMS Parameters defined
+    Input M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\transport02.gms
+    PageSize 0
+    ScrDir M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\225a\
+    SysDir M:\PROGRAMY\gams32\
+    LogOption 3
+    ErrMsg 1
+    ErrorLog 99
+    IDE 1
+    LstTitleLeftAligned 1
+GAMS 32.2.0   Copyright (C) 1987-2020 GAMS Development. All rights reserved
+Licensee: GAMS Demo license for Marek Kovalcik           G201017|0002CO-GEN
+          Brno university of technology, Czech Republic            DL020636
+          M:\PROGRAMY\gams32\gamslice.txt
+          196248@usi.vutbr.cz, Marek Kovalcik                              
+          Demo license for demonstration and instructional purposes only
+--- Starting compilation
+--- transport02.gms(30) 3 Mb 1 Error
+*** Error 141 in M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\transport02.gms
+    Symbol declared but no values have been assigned. Check for missing
+       data definition, assignment, data loading or implicit assignment
+       via a solve statement.
+       A wild shot: You may have spurious commas in the explanatory
+       text of a declaration. Check symbol reference list.
+--- transport02.gms(51) 3 Mb 2 Errors
+*** Error 257 in M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\transport02.gms
+    Solve statement not checked because of previous errors
+--- transport02.gms(53) 3 Mb 3 Errors
+*** Error 141 in M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\transport02.gms
+    Symbol declared but no values have been assigned. Check for missing
+       data definition, assignment, data loading or implicit assignment
+       via a solve statement.
+       A wild shot: You may have spurious commas in the explanatory
+       text of a declaration. Check symbol reference list.
+--- transport02.gms(53) 3 Mb 3 Errors
+*** Status: Compilation error(s)
+--- Job transport02.gms Stop 11/17/20 14:30:14 elapsed 0:00:00.013

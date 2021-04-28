@@ -1,0 +1,139 @@
+--- Job transport_stoch_det_TS.gms Start 10/17/20 20:12:13 30.1.0 re01a340 WEX-WEI x86 64bit/MS Windows
+--- GAMS Parameters defined
+    Input M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport_stoch_det_TS.gms
+    PageSize 0
+    ScrDir M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\225a\
+    SysDir M:\PROGRAMY\gams30.1\
+    LogOption 3
+    ErrMsg 1
+    ErrorLog 99
+    IDE 1
+    LstTitleLeftAligned 1
+GAMS 30.1.0   Copyright (C) 1987-2020 GAMS Development. All rights reserved
+Licensee: Medium MUD - 10 User License                   S170901:0725AO-GEN
+          Brno University of Technology, Dept. of Process and EnviroDC13506
+--- Starting compilation
+--- transport_stoch_det_TS.gms(154) 3 Mb
+--- Starting execution: elapsed 0:00:00.004
+--- transport_stoch_det_TS.gms(108) 4 Mb
+--- Generating LP model nonstoch
+--- transport_stoch_det_TS.gms(111) 4 Mb
+---   9 rows  29 columns  72 non-zeroes
+--- Executing CPLEX: elapsed 0:00:00.010
+IBM ILOG CPLEX   30.1.0 re01a340 Released Jan 10, 2020 WEI x86 64bit/MS Window
+--- GAMS/Cplex licensed for continuous and discrete problems.
+Cplex 12.10.0.0
+Reading data...
+Starting Cplex...
+Space for names approximately 0.00 Mb
+Use option 'names no' to turn use of names off
+Version identifier: 12.10.0.0 | 2019-11-26 | 843d4de2ae
+CPXPARAM_Advance                                 0
+CPXPARAM_Simplex_Display                         2
+CPXPARAM_Threads                                 1
+CPXPARAM_Parallel                                1
+CPXPARAM_Simplex_Limits_Iterations               2000000000
+CPXPARAM_TimeLimit                               1000
+CPXPARAM_Tune_TimeLimit                          200
+Tried aggregator 1 time.
+LP Presolve eliminated 1 rows and 1 columns.
+Reduced LP has 8 rows, 28 columns, and 43 nonzeros.
+Presolve time = 0.00 sec. (0.02 ticks)
+Iteration      Dual Objective            In Variable           Out Variable
+     1           36351.000000            ship(f1.d5)      selling(d5) artif
+     2           34685.000000            ship(f3.d5)   production(f1) artif
+     3           34468.000000            ship(f2.d5)   production(f3) artif
+     4           26075.000000            product(f3)   production(f2) artif
+     5           21021.250000            ship(f2.d4)      selling(d4) artif
+     6           16830.850000            ship(f2.d3)      selling(d3) artif
+     7           16534.750000            ship(f3.d3)            ship(f2.d5)
+     8           13937.950000            ship(f2.d1)      selling(d1) artif
+     9           11888.350000            ship(f3.d2)      selling(d2) artif
+    10           11852.300000            ship(f3.d1)            ship(f2.d3)
+LP status(1): optimal
+Cplex Time: 0.00sec (det. 0.03 ticks)
+Optimal solution found.
+Objective :       11852.300000
+--- Restarting execution
+--- transport_stoch_det_TS.gms(111) 2 Mb
+--- Reading solution for model nonstoch
+--- Executing after solve: elapsed 0:00:00.079
+--- transport_stoch_det_TS.gms(142) 3 Mb
+--- Generating LP model stoch
+--- transport_stoch_det_TS.gms(145) 4 Mb
+---   1,224 rows  2,454 columns  6,132 non-zeroes
+--- Executing CPLEX: elapsed 0:00:00.088
+IBM ILOG CPLEX   30.1.0 re01a340 Released Jan 10, 2020 WEI x86 64bit/MS Window
+--- GAMS/Cplex licensed for continuous and discrete problems.
+Cplex 12.10.0.0
+Reading data...
+Starting Cplex...
+Space for names approximately 0.09 Mb
+Use option 'names no' to turn use of names off
+Version identifier: 12.10.0.0 | 2019-11-26 | 843d4de2ae
+CPXPARAM_Advance                                 0
+CPXPARAM_Threads                                 1
+CPXPARAM_Parallel                                1
+CPXPARAM_Simplex_Limits_Iterations               2000000000
+CPXPARAM_TimeLimit                               1000
+CPXPARAM_Tune_TimeLimit                          200
+Tried aggregator 1 time.
+LP Presolve eliminated 1 rows and 1 columns.
+Reduced LP has 1223 rows, 2453 columns, and 3683 nonzeros.
+Presolve time = 0.00 sec. (2.20 ticks)
+Symmetry aggregator did 3258 additional substitutions.
+Initializing dual steep norms . . .
+Iteration log . . .
+Iteration:     1   Dual objective     =         36858.000000
+Iteration:    62   Dual objective     =         14865.900000
+Iteration:   124   Dual objective     =         10808.200000
+Dual crossover.
+  Dual:  Fixing 334 variables.
+      333 DMoves:  Infeasibility  1.72917236e-14  Objective  1.07930000e+04
+      188 DMoves:  Infeasibility  6.38378239e-16  Objective  1.07930000e+04
+      103 DMoves:  Infeasibility  2.68882139e-16  Objective  1.07930000e+04
+       23 DMoves:  Infeasibility  6.07153217e-17  Objective  1.07930000e+04
+        0 DMoves:  Infeasibility  0.00000000e+00  Objective  1.07930000e+04
+  Dual:  Pushed 62, exchanged 272.
+  Primal:  Fixed no variables.
+LP status(1): optimal
+Cplex Time: 0.02sec (det. 7.50 ticks)
+Optimal solution found.
+Objective :       10793.000000
+--- Restarting execution
+--- transport_stoch_det_TS.gms(145) 2 Mb
+--- Reading solution for model stoch
+--- Executing after solve: elapsed 0:00:00.183
+--- transport_stoch_det_TS.gms(153) 3 Mb
+--- Generating LP model stoch
+--- transport_stoch_det_TS.gms(154) 4 Mb
+---   1,224 rows  2,454 columns  6,132 non-zeroes
+--- Executing CPLEX: elapsed 0:00:00.194
+IBM ILOG CPLEX   30.1.0 re01a340 Released Jan 10, 2020 WEI x86 64bit/MS Window
+--- GAMS/Cplex licensed for continuous and discrete problems.
+Cplex 12.10.0.0
+Reading data...
+Starting Cplex...
+Space for names approximately 0.09 Mb
+Use option 'names no' to turn use of names off
+Version identifier: 12.10.0.0 | 2019-11-26 | 843d4de2ae
+CPXPARAM_Advance                                 2
+CPXPARAM_Threads                                 1
+CPXPARAM_Parallel                                1
+CPXPARAM_Simplex_Limits_Iterations               2000000000
+CPXPARAM_TimeLimit                               1000
+CPXPARAM_Tune_TimeLimit                          200
+Tried aggregator 1 time.
+LP Presolve eliminated 1224 rows and 2454 columns.
+All rows and columns eliminated.
+Presolve time = 0.00 sec. (0.94 ticks)
+LP status(1): optimal
+Cplex Time: 0.00sec (det. 1.72 ticks)
+Optimal solution found.
+Objective :       10452.300000
+--- Restarting execution
+--- transport_stoch_det_TS.gms(154) 2 Mb
+--- Reading solution for model stoch
+*** Status: Normal completion
+--- Job transport_stoch_det_TS.gms Stop 10/17/20 20:12:13 elapsed 0:00:00.285
+

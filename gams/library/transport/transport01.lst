@@ -1,0 +1,48 @@
+GAMS 30.1.0  re01a340 Released Jan 10, 2020 WEX-WEI x86 64bit/MS Windows - 10/27/20 10:49:40 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  Sets
+   2         i   canning plants   / seattle, san-diego /
+   3         j   markets          / new-york, chicago, topeka / ;
+   4   
+   5    Parameters
+   6   
+   7         a(i)  capacity of plant i in cases
+   8           /    seattle     350
+   9                san-diego   600  /
+  10   
+  11         b(j)  demand at market j in cases
+  12           /    new-york    325
+  13                chicago     300
+  14                topeka      275  / ;
+  15   
+  16    Table d(i,j)  distance in thousands of miles
+  17                      new-york       chicago      topeka
+  18        seattle          2.5           1.7          1.8
+  19        san-diego        2.5           1.8          1.4  ;
+  20   
+  21    Scalar f  freight in dollars per case per thousand miles;
+  22   
+  23  $abort 'no include file name for data file provided'
+****       $343
+**** 343  Abort triggered by above statement
+
+**** 1 ERROR(S)   0 WARNING(S)
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  30.1.0 re01a340 WEX-WEI
+
+
+USER: Medium MUD - 10 User License                   S170901:0725AO-GEN
+      Brno University of Technology, Dept. of Process and EnviroDC13506
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\transport01.gms
+Output     M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\transport01.lst
+
+**** USER ERROR(S) ENCOUNTERED

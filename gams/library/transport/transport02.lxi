@@ -1,0 +1,18 @@
+B 3 C o m p i l a t i o n
+B 64 Equation Listing    SOLVE transport Using LP From line 51
+D 67 cost
+D 72 supply
+D 79 demand
+B 89 Column Listing      SOLVE transport Using LP From line 51
+E 92 x
+E 114 z
+B 122 Model Statistics    SOLVE transport Using LP From line 51
+B 135 Solution Report     SOLVE transport Using LP From line 51
+F 165 cost
+F 169 supply
+F 176 demand
+G 184 x
+G 197 z
+B 207 E x e c u t i o n
+I 207 x
+I 216 x

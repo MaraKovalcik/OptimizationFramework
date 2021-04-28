@@ -1,0 +1,41 @@
+--- Job transport02.gms Start 10/27/20 14:05:45 30.1.0 re01a340 WEX-WEI x86 64bit/MS Windows
+--- GAMS Parameters defined
+    Input M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\transport02.gms
+    PageSize 0
+    ScrDir M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\225a\
+    SysDir M:\PROGRAMY\gams30.1\
+    LogOption 3
+    ErrMsg 1
+    ErrorLog 99
+    IDE 1
+    LstTitleLeftAligned 1
+GAMS 30.1.0   Copyright (C) 1987-2020 GAMS Development. All rights reserved
+Licensee: Medium MUD - 10 User License                   S170901:0725AO-GEN
+          Brno University of Technology, Dept. of Process and EnviroDC13506
+--- Starting compilation
+--- transport02.gms(25) 3 Mb
+--- GDXin=C:\Users\marak\AppData\Local\Temp\tmp47w3v46f\_gams_py_gdb0.gdx
+--- transport02.gms(26) 3 Mb 3 Errors
+*** Error 140 in M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\transport02.gms
+    Unknown symbol
+*** Error 140 in M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\transport02.gms
+    Unknown symbol
+*** Error 140 in M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\transport02.gms
+    Unknown symbol
+--- transport02.gms(31) 3 Mb 4 Errors
+*** Error 140 in M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\transport02.gms
+    Unknown symbol
+--- transport02.gms(52) 3 Mb 5 Errors
+*** Error 257 in M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\transport02.gms
+    Solve statement not checked because of previous errors
+--- transport02.gms(54) 3 Mb 6 Errors
+*** Error 141 in M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\transport\transport02.gms
+    Symbol declared but no values have been assigned. Check for missing
+       data definition, assignment, data loading or implicit assignment
+       via a solve statement.
+       A wild shot: You may have spurious commas in the explanatory
+       text of a declaration. Check symbol reference list.
+--- transport02.gms(54) 3 Mb 6 Errors
+*** Status: Compilation error(s)
+--- Job transport02.gms Stop 10/27/20 14:05:45 elapsed 0:00:00.014
+

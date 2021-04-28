@@ -1,0 +1,74 @@
+B 3 C o m p i l a t i o n
+B 163 Equation Listing    SOLVE nonstoch Using LP From line 111
+D 166 obj
+D 174 production
+D 183 selling
+B 195 Column Listing      SOLVE nonstoch Using LP From line 111
+E 198 ship
+E 220 product
+E 238 sales
+E 257 waste
+E 276 profit
+B 284 Model Statistics    SOLVE nonstoch Using LP From line 111
+B 300 Solution Report     SOLVE nonstoch Using LP From line 111
+F 330 obj
+F 332 production
+F 340 selling
+G 350 ship
+G 370 product
+G 378 sales
+G 388 waste
+G 400 profit
+B 408 E x e c u t i o n
+I 408 ship
+I 418 product
+I 423 sales
+I 428 waste
+B 436 Equation Listing    SOLVE stoch Using LP From line 145
+D 439 objw
+D 956 production
+D 965 receive
+D 976 sellingw
+B 988 Column Listing      SOLVE stoch Using LP From line 145
+E 991 ship
+E 1013 product
+E 1031 profit
+E 1038 salesw
+E 1057 wastew
+E 1076 received
+B 1822 Model Statistics    SOLVE stoch Using LP From line 145
+B 1838 Solution Report     SOLVE stoch Using LP From line 145
+F 1868 objw
+F 1870 production
+F 1878 receive
+F 1888 sellingw
+G 3108 ship
+G 3128 product
+G 3138 profit
+G 3140 salesw
+G 4360 wastew
+G 5580 received
+B 5596 Equation Listing    SOLVE stoch Using LP From line 154
+D 5599 objw
+D 6116 production
+D 6125 receive
+D 6136 sellingw
+B 6148 Column Listing      SOLVE stoch Using LP From line 154
+E 6151 ship
+E 6173 product
+E 6191 profit
+E 6198 salesw
+E 6217 wastew
+E 6236 received
+B 6982 Model Statistics    SOLVE stoch Using LP From line 154
+B 6998 Solution Report     SOLVE stoch Using LP From line 154
+F 7028 objw
+F 7030 production
+F 7038 receive
+F 7048 sellingw
+G 8268 ship
+G 8288 product
+G 8298 profit
+G 8300 salesw
+G 9520 wastew
+G 10740 received

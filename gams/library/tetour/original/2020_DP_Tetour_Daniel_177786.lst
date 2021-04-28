@@ -1,0 +1,855 @@
+GAMS 30.1.0  re01a340 Released Jan 10, 2020 WEX-WEI x86 64bit/MS Windows - 04/26/21 22:05:58 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   2   
+   3  //Castecne vypnuti vypisu
+   4  option limrow = 0;
+   5  option limcol = 0;
+   6  option solprint = off;
+   7   
+   8  set i          typ kotle na biomasu         / Bio1, Bio2 /,
+   9      j          typ kotle na plyn            / Plyn /,
+  10      t          uvazovane casy               / 1 * 49 /,
+  11      s          uvazovane scenare            / 1 * 3 /,
+  12      m          mesice                       / 1 * 12 /,
+  13      r          hranice pro generatory       / d, h /,
+  14      l          pocet simulaci               / 1*4 /;
+  15  alias(s,ss);
+  16   
+  17  Parameter
+  18      v(t,r) rozsah spotreby vody na osobu v case t /
+  19         1.d  1.12,   1.h  1.12,   2.d  0.68,   2.h  0.68,
+  20         3.d  0.68,   3.h  0.68,   4.d  0.48,   4.h  0.48,
+  21         5.d  0.48,   5.h  0.48,   6.d  0.28,   6.h  0.28,
+  22         7.d  0.28,   7.h  0.28,   8.d  0.12,   8.h  0.12,
+  23         9.d  0.12,   9.h  0.12,  10.d  0.04,  10.h  0.04,
+  24        11.d  0.04,  11.h  0.04,  12.d  0.08,  12.h  0.08,
+  25        13.d  0.08,  13.h  0.08,  14.d  0.24,  14.h  0.24,
+  26        15.d  0.24,  15.h  0.24,  16.d  0.52,  16.h  0.52,
+  27        17.d  0.52,  17.h  0.52,  18.d  0.56,  18.h  0.56,
+  28        19.d  0.56,  19.h  0.56,  20.d  1.064, 20.h  1.064,
+  29        21.d  1.06,  21.h  1.06,  22.d  1.024, 22.h  1.024,
+  30        23.d  1.02,  23.h  1.02,  24.d  1.08,  24.h  1.08,
+  31        25.d  1.08,  25.h  1.08,  26.d  0.984, 26.h  0.984,
+  32        27.d  0.98,  27.h  0.98,  28.d  1.28,  28.h  1.28,
+  33        29.d  1.28,  29.h  1.28,  30.d  1.104, 30.h  1.104,
+  34        31.d  1.1,   31.h  1.1,   32.d  0.96,  32.h  0.96,
+  35        33.d  0.96,  33.h  0.96,  34.d  0.76,  34.h  0.76,
+  36        35.d  0.76,  35.h  0.76,  36.d  0.8,   36.h  0.8,
+  37        37.d  0.8,   37.h  0.8,   38.d  1,     38.h  1,
+  38        39.d  1,     39.h  1,     40.d  1.008, 40.h  1.008,
+  39        41.d  1.008, 41.h  1.008, 42.d  1.16,  42.h  1.16,
+  40        43.d  1.16,  43.h  1.16,  44.d  1.344, 44.h  1.344,
+  41        45.d  1.34,  45.h  1.34,  46.d  1.264, 46.h  1.264,
+  42        47.d  1.26,  47.h  1.26,  48.d  1.12,  48.h  1.12,
+  43        49.d  1.12,  49.h  1.12/;
+  44   
+  45      // Parametry pro vypocet poptavky po teple vode
+  46  Parameter    o          prumerny pocet obyvatel v domacnosti      / 2.3 /,
+  47      d          pocet domacnosti                          / 5000 /,
+  48      Td         teplotni rozdil ohrivane vody             / 35 /,
+  49      Ve(t,s)    mnozstvi poptavane teple vody v case t scenari s;
+  50   
+  51  // Generator poptavky po teple vode v case t scenari s
+  52  Ve(t,s) = uniform(v(t,'d'),v(t,'h'))*o*d;
+  53   
+  54  Parameter
+  55      min(m,r) rozsah minimalnich teplot v mesici m /
+  56         1.d  -12.0,   1.h  -1.3,   2.d   -8.8,   2.h  -0.4,
+  57         3.d   -7.0,   3.h   6.4,   4.d   -0.2,   4.h  13.9,
+  58         5.d    4.6,   5.h  12.8,   6.d   11.5,   6.h  17.9,
+  59         7.d    7.9,   7.h  19.1,   8.d   11.7,   8.h  20.3,
+  60         9.d    4.8,   9.h  16.6,  10.d    1.1,  10.h  11.9,
+  61        11.d   -0.3,  11.h   9.3,  12.d   -4.3,  12.h   1.6/,
+  62   
+  63      max(m,r) rozsah maximalnich teplot v mesici m /
+  64         1.d   -4.0,   1.h   2.7,   2.d    1.1,   2.h  10.9,
+  65         3.d   -2.9,   3.h  16.5,   4.d    8.8,   4.h  20.0,
+  66         5.d   11.4,   5.h  23.2,   6.d   23.7,   6.h  28.7,
+  67         7.d   21.4,   7.h  34.3,   8.d   21.6,   8.h  33.2,
+  68         9.d   17.1,   9.h  25.8,  10.d   10.8,  10.h  21.0,
+  69        11.d    2.6,  11.h  16.2,  12.d   -0.5,  12.h   7.4/,
+  70   
+  71      // Parametry pro ulozeni generovanych teplot
+  72      min_tp     minimalni denni teplota,
+  73      max_tp     maximalni denni teplota;
+  74   
+  75  // generator minimalnich a maximalnich teplot v mesici m
+  76  min_tp = uniform(min('10','d'),min('10','h'));
+  77  max_tp = uniform(max('10','d'),max('10','h'));
+  78   
+  79  Parameter
+  80      k(t,s) prumerne nominalni teploty v case t scenari s/
+  81         1.1  0.354674309,   1.2  0.086248725,   1.3  0.923192406,
+  82         2.1  0.318634411,   2.2  0.091846069,   2.3  0.883791134,
+  83         3.1  0.282594514,   3.2  0.097443412,   3.3  0.844389862,
+  84         4.1  0.25424421,    4.2  0.102140038,   4.3  0.846222927,
+  85         5.1  0.225893907,   5.2  0.106836663,   5.3  0.848055992,
+  86         6.1  0.214925707,   6.2  0.106914519,   6.3  0.813868309,
+  87         7.1  0.203957507,   7.2  0.106992374,   7.3  0.779680626,
+  88         8.1  0.185810702,   8.2  0.098657273,   8.3  0.748160407,
+  89         9.1  0.167663897,   9.2  0.090322172,   9.3  0.716640188,
+  90        10.1  0.145636411,  10.2  0.087045836,  10.3  0.702258859,
+  91        11.1  0.123608925,  11.2  0.0837695,    11.3  0.68787753,
+  92        12.1  0.118744572,  12.2  0.075635441,  12.3  0.659389107,
+  93        13.1  0.113880219,  13.2  0.067501383,  13.3  0.630900683,
+  94        14.1  0.130192748,  14.2  0.075373312,  14.3  0.597032709,
+  95        15.1  0.146505277,  15.2  0.083245241,  15.3  0.563164735,
+  96        16.1  0.190840978,  16.2  0.125146605,  16.3  0.576333307,
+  97        17.1  0.235176678,  17.2  0.167047969,  17.3  0.589501879,
+  98        18.1  0.312723195,  18.2  0.21562668,   18.3  0.621222204,
+  99        19.1  0.390269711,  19.2  0.26420539,   19.3  0.652942529,
+ 100        20.1  0.47794189,   20.2  0.305839061,  20.3  0.649772213,
+ 101        21.1  0.565614069,  21.2  0.347472732,  21.3  0.646601898,
+ 102        22.1  0.64002258,   22.2  0.413595203,  22.3  0.650245141,
+ 103        23.1  0.714431091,  23.2  0.479717675,  23.3  0.653888384,
+ 104        24.1  0.762820866,  24.2  0.52887104,   24.3  0.690372855,
+ 105        25.1  0.811210641,  25.2  0.578024405,  25.3  0.726857325,
+ 106        26.1  0.844439643,  26.2  0.62197175,   26.3  0.735073874,
+ 107        27.1  0.877668644,  27.2  0.665919095,  27.3  0.743290423,
+ 108        28.1  0.903662235,  28.2  0.709730662,  28.3  0.741237925,
+ 109        29.1  0.929655826,  29.2  0.753542229,  29.3  0.739185427,
+ 110        30.1  0.923823275,  30.2  0.797130018,  30.3  0.754200761,
+ 111        31.1  0.917990723,  31.2  0.840717808,  31.3  0.769216094,
+ 112        32.1  0.90562569,   32.2  0.855828273,  32.3  0.742536687,
+ 113        33.1  0.893260658,  33.2  0.870938737,  33.3  0.715857281,
+ 114        34.1  0.875587882,  34.2  0.843878548,  34.3  0.658098893,
+ 115        35.1  0.857915107,  35.2  0.816818359,  35.3  0.600340506,
+ 116        36.1  0.822153244,  36.2  0.797633413,  36.3  0.541040939,
+ 117        37.1  0.786391381,  37.2  0.778448466,  37.3  0.481741372,
+ 118        38.1  0.739045953,  38.2  0.779015084,  38.3  0.421615824,
+ 119        39.1  0.691700526,  39.2  0.779581702,  39.3  0.361490276,
+ 120        40.1  0.641371997,  40.2  0.754616093,  40.3  0.305766209,
+ 121        41.1  0.591043468,  41.2  0.729650483,  41.3  0.250042141,
+ 122        42.1  0.541011028,  42.2  0.743940745,  42.3  0.225461984,
+ 123        43.1  0.490978588,  43.2  0.758231006,  43.3  0.200881826,
+ 124        44.1  0.440488378,  44.2  0.772004342,  44.3  0.167503346,
+ 125        45.1  0.389998167,  45.2  0.785777679,  45.3  0.134124867,
+ 126        46.1  0.361089001,  46.2  0.803653719,  46.3  0.120841812,
+ 127        47.1  0.332179834,  47.2  0.821529758,  47.3  0.107558758,
+ 128        48.1  0.302628665,  48.2  0.832776704,  48.3  0.078117686,
+ 129        49.1  0.273077495,  49.2  0.844023649,  49.3  0.048676615/;
+ 130   
+ 131   
+ 132   
+ 133  Parameter
+ 134      // Parametry pro vypocet poptavky po vytapeni
+ 135      A          horni asymptota                / 1933.88202706417 /,
+ 136      e          konstantní Eulerovo cislo      / 2.71828182845905 /,
+ 137      Kg         logisticky rustovy koeficient  / -0.735635517649199 /,
+ 138      T0         Sigmoiduv stredni bod          / 9.41541981244695 /,
+ 139      Tp(t,s)    venkovni teplota v case t scenari s,
+ 140      Pt(t,s)    celkova poptavka Pt po teple v case t scenari s,
+ 141      Vr(s)      celkova vyrobena energie beze ztrat ve scenari s;
+ 142   
+ 143  // Vypocet denni teploty v case t scenari s
+ 144  Tp(t,s) = round(k(t,s) * (max_tp - min_tp) +  min_tp,1);
+ 145   
+ 146  // Vypocet celkove poptavky po energii v case t
+ 147  // Prvni cast rovnice pocita poptavku po energii potrebnou k vytapeni.
+ 148  // Druha cast rovnice pocita poptavku po energii potrebnou k ohrevu vody.
+ 149  Pt(t,s) = A/(1+e**(-Kg*(Tp(t,s)-T0))) + (4.2*Ve(t,s)*Td)/3600;
+ 150  Pt(t,s) = round(Pt(t,s),0);
+ 151   
+ 152  Parameter
+ 153      // Parametry kapacit kotlu
+ 154      cap(i)  maximalni kapacita kotle typu i / Bio1 550, Bio2 750 /,
+ 155   
+ 156      // Parametry pro vypocet nakladu a prijmu
+ 157      bc         jednotkova cena za kWh vyrobenou biomasou / 0.65 /,
+ 158      gc         jednotkova cena za kWh vyrobenou plynem   / 1.40 /,
+ 159      gjp        zisk z jednoho GJ vyrobene energie        / 552 /,
+ 160      pst(s)     pravdepodobnost scenare                   / 1 0.8,
+ 161                                                             2 0.1,
+ 162                                                             3 0.1 /
+ 163      zmeny(i),
+ 164      f(t,s)     nahodne generovana ztrata tepelneho zasobniku,
+ 165      poztrate(t,s) energie na skladu po odecteni ztraty,
+ 166      pohyb(t,s) energie vzana ze zasobniku po poryti poptavky Pt case t scenari s,
+ 167      prubeh(i,t,s) mnozstvi vyrobene kotlem typu i v case t scenari s,
+ 168      spinac(i,t) ukazatel here-and-now rozhodnuti kotle typu i v case t;
+ 169   
+ 170  zmeny(i) = uniform(2,5);
+ 171  zmeny(i) = round(zmeny(i),0);
+ 172  f(t,s) = uniform(0.85, 0.95);
+ 173  f(t,s) = round(f(t,s),2);
+ 174   
+ 175  variable
+ 176      // Promenne pro dilci vypocty nakladu
+ 177      bic(s)     naklady na vyrobu biomasou,
+ 178      plc(s)     naklady na vyrobu zemnim plynem,
+ 179      snc(s)     naklady v-teho scenare na vyrobu,
+ 180   
+ 181      // Promenne pro dilci vypoctu prijmu
+ 182      bir(s)     prijem z energie vyrobene biomasou,
+ 183      plr(s)     prijem z energie vyrobene zemnim plynem,
+ 184      snr(s)     prijem  za prodej energie v-teho scenare,
+ 185   
+ 186      // Promenne pro ulozeni celkovych nakladu a prijmu
+ 187      tc         celkove naklady na vyrobu,
+ 188      tr         celkove prijmy za vyrobenou energii,
+ 189   
+ 190      // promenna pro ulozeni ucelove funkce
+ 191      z          hodnota ucelove funkce;
+ 192   
+ 193   
+ 194   
+ 195  Binary variables
+ 196      x(i,t,s) vyuziti kotle typu i v case t pro scenar s;
+ 197   
+ 198  Positive variables
+ 199      yP(j,t,s) vyuziti kotle typu j v case t pro scenar s,
+ 200      yZ(t,s)      zasobník se ztratou f,
+ 201      deltaxp(i,t,s) citac plus zmen,
+ 202      deltaxm(i,t,s) citac minus zmen;
+ 203   
+ 204  deltaxp.L(i,t,s) = 0;
+ 205  deltaxm.L(i,t,s) = 0;
+ 206   
+ 207  // horni mez pro vyuziti jednoho kotle
+ 208  x.UP(i,t,s) = 1;
+ 209  // maximalni kapacitu kotle typu j
+ 210  yP.UP(j,t,s) = 9600;
+ 211  // maximalni kapacita zasobniku yZ
+ 212  yZ.UP(t,s) = 2000;
+ 213  // omezeni zasobniku yZ v case t = 49
+ 214  yZ.L('49',s) = 0;
+ 215   
+ 216  Equations
+ 217      bio_cost(s)      naklady na vyrobu z biomasy ve scenari s,
+ 218      zpl_cost(s)      naklady na vyrobu ze zemniho plynu ve scenari s,
+ 219      scn_cost(s)      celkove naklady ve scenari s;
+ 220   
+ 221  bio_cost(s)..
+ 222      bic(s) =E= pst(s) * (sum(t,(x('Bio1',t,s)*cap('Bio1')
+ 223                           + x('Bio2',t,s)*cap('Bio2')))) * bc;
+ 224  zpl_cost(s)..
+ 225      plc(s) =E= pst(s) * sum(t,yP('Plyn',t,s)) * gc;
+ 226   
+ 227  scn_cost(s)..  snc(s) =E=  bic(s) + plc(s);
+ 228   
+ 229  Equations
+ 230      scn_revenue(s)   celkove primy za scenar s ;
+ 231   
+ 232  scn_revenue(s)..  snr(s) =E=  pst(s) * sum(t,Pt(t,s))/277.78*gjp;
+ 233   
+ 234   
+ 235  Equations
+ 236     total_cost        celkove naklady za vsechny scenare,
+ 237     total_revenue     celkove prijmy za vsechny scenare;
+ 238   
+ 239  total_cost..         tc =E= sum(s, snc(s));
+ 240  total_revenue..      tr =E= sum(s, snr(s));
+ 241   
+ 242  Equations
+ 243     profit            ucelova funkce predmetem maximalizacet;
+ 244   
+ 245  profit..             z =E= tr - tc;
+ 246   
+ 247  Equations
+ 248      omez(t,s)        omezeni pro splneni poptavky v case t pro scenar s,
+ 249      omez1(t,s)       omezeni pro splneni poptavky v case 1 pro scenar s,
+ 250      HNWS(i,t,s)      neanticipativni omezeni v case t pro scenare s,
+ 251      delta(i,t,s)     pomocne omezeni,
+ 252      pocetzmen(i,s) omezeni poctu zmen;
+ 253   
+      omez1(t,s)$(ord(t) EQ 1)..
+          sum(i,x(i,t,s)*cap(i)) + sum(j,yP(j,t,s)) =E= Pt(t,s);
+       
+      omez(t,s)$(ord(t) GT 1)..
+          sum(i,cap(i)*x(i,t,s)) + sum(j,yP(j,t,s)) =E= Pt(t,s);
+ 261  //$ontext
+ 262  omez(t,s)$(ord(t) GT 1)..
+ 263      f(t-1,s)*yZ(t-1,s) + sum(i,cap(i)*x(i,t,s)) + sum(j,yP(j,t,s)) - yZ(t,s)
+ 264      =E= Pt(t,s);
+ 265   
+ 266  omez1(t,s)$(ord(t) EQ 1)..
+ 267      sum(i,x(i,t,s)*cap(i)) + sum(j,yP(j,t,s)) - yZ(t,s) =E= Pt(t,s);
+ 268  //$offtext
+ 269   
+ 270  HNWS(i,t,s)..
+ 271      sum(ss, pst(ss) * x(i,t,ss)) =E= x(i,t,s);
+ 272   
+ 273  delta(i,t,s)$(ord(t) GT 1)..
+ 274      deltaxp(i,t,s)-deltaxm(i,t,s) =E= x(i,t,s)-x(i,t-1,s);
+ 275   
+ 276  pocetzmen(i,s)..
+ 277      sum(t, deltaxp(i,t,s) + deltaxm(i,t,s) ) =L= zmeny(i);
+ 278   
+ 279  model OptimTepla /all/;
+ 280   
+ 281  file out1 / "vysledky.txt" /;
+ 282  put out1;
+ 283   
+ 284  solve OptimTepla maximizing z using MIP;
+ 285  display z.L, x.L, yP.L, yZ.L, omez.L, Pt, cap, bc, gc, delta.L;
+ 286  display f, zmeny, pocetzmen.L, deltaxp.L, deltaxm.L;
+ 287  poztrate(t,s) =  f(t,s)*yZ.L(t,s);
+ 288  pohyb(t,s) = sum(i,x.L(i,t,s)*cap(i))+sum(j,yP.L(j,t,s))-Pt(t,s);
+ 289  prubeh(i,t,s) = x.L(i,t,s)*(cap(i));
+ 290  spinac(i,t) = sum(s, x.L(i,t,s))/3;
+ 291  Vr(s) = sum(t,sum(i,x.L(i,t,s)*cap(i))+sum(j,yP.L(j,t,s)))
+ 292   
+ 293  put "Vysledky" /;
+ 294  put "========" / /;
+ 295   
+ 296  If(OptimTepla.modelstat EQ 1,
+ 297  put "Nalezeno optimalni reseni";);
+ 298  If(OptimTepla.modelstat EQ 2,
+ 299  put "Nalezeno lokalne optimalni reseni";);
+ 300  If(OptimTepla.modelstat EQ 3,
+ 301  put "Neomezena ucelova funkce na mnozine pripustnych reseni";);
+ 302  If(OptimTepla.modelstat EQ 4,
+ 303  put "Neexistuje pripustne reseni";);
+ 304  If(OptimTepla.modelstat EQ 5,
+ 305  put "Lokalne neexistuje pripustne reseni";);
+ 306  If(OptimTepla.modelstat EQ 6,
+ 307  put "Prubezne neexistuje pripustne reseni";);
+ 308  If(OptimTepla.modelstat EQ 7,
+ 309  put "Prubezne neoptimalni reseni";);
+ 310  If(OptimTepla.modelstat EQ 8,
+ 311  put "Celociselne reseni";);
+ 312   
+ 313  put / /;
+ 314  put "Naklady = ", tc.L:10:2 /;
+ 315  put "Vynosy  = ", tr.L:10:2 /;
+ 316  put "Zisk    = ", z.L:10:2 / /;
+ 317   
+ 318  put "Minimalni denni teplota = ", min_tp:6:2 /;
+ 319  put "Maximalni denni teplota = ",max_tp:6:2 / /;
+ 320   
+ 321  put "t  ",  "    symbol", " | naklad", " | kapacita", " | Prepinani |      ";
+ 322  loop(s, put s.TL:3," |      ";); put /;
+ 323  put "   ",  "    pst(s)", " |      ", "  |          |", "         ";
+ 324  put "  |",loop(s, put pst(s):9:2," |";); put /;
+ 325  put "              |        |          |           |          |          |          |" /;
+ 326  put "   ",  "    scn(s)", " |      ", "  |          |", "         ";
+ 327  put "  |",loop(s, put snc.L(s):9," |";); put /;
+ 328  put "   ",  "    scr(s)", " |      ", "  |          |", "         ";
+ 329  put "  |",loop(s, put snr.L(s):9," |";); put /;
+ 330  put "   ",  "     Pt(s)", " |      ", "  |          |", "         ";
+ 331  put "  |",loop(s, put sum(t,Pt(t,s)):9," |";); put /;
+ 332  put "   ",  "     Vr(s)", " |      ", "  |          |", "         ";
+ 333  put "  |",loop(s, put Vr(s):9," |";); put /;
+ 334  put "================================================================================"/;
+ 335  loop(t,
+ 336   
+ 337  put t.TL:3, "   Ve(t,s)", " |      ", "  |          |", "           |";
+ 338  loop(s, put Ve(t,s):9:2," |";);  put / ;
+ 339  put "      Tp(t,s)", " |      ", "  |          |", "           |";
+ 340  loop(s, put Tp(t,s):9:2," |";);  put / ;
+ 341  put "      Pt(t,s)", " |      ", "  |          |", "           |";
+ 342  loop(s, put Pt(t,s):9:2," |";);  put / ;
+ 343  put "              |        |          |           |     <=   |     <=   |     <=   |" /;
+ 344  put  "   ", "    omez.L", " |      ", "  |          |", "           |";
+ 345  loop(s, put omez.L(t,s):9:2," |";); put /;
+ 346  put  "       f(t,s)", " |      ", "  |          |", "           |";
+ 347  loop(s, put f(t-1,s):9:2," |";); put /;
+ 348          put  "   ", " Po ztrate", " |      ", "  |          |", "           |";
+ 349  loop(s, put poztrate(t-1,s):9:2," |";); put /;
+ 350  loop(i, put  "   ", "      ", i.TL:4, " |  ", bc:4:2,"  |  ", cap(i):6,"  |",spinac(i,t):8, "   |";
+ 351  loop(s, put prubeh(i,t,s):9:2," |";); put /;);
+ 352  loop(j, put  "   ", "      ",j.TL:4, " |  ", gc:4:2,"  |", " 9300.00", "  |           |";
+ 353  loop(s, put yP.L(j,t,s):9:2," |";); put /;);
+ 354          put  "   ", "     Pohyb", " |      ", "  |          |", "           |";
+ 355  loop(s, put pohyb(t,s):9:2," |";); put /;
+ 356          put  "   ", " Na sklade", " |      ", "  |          |", "           |";
+ 357  loop(s, put yZ.L(t,s):9:2," |";); put /;
+ 358  put "--------------------------------------------------------------------------------"/;
+ 359  );
+ 360  put /;
+ 361   
+ 362   
+ 363   
+ 364   
+ 365   
+ 366   
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  30.1.0 re01a340 WEX-WEI
+GAMS 30.1.0  re01a340 Released Jan 10, 2020 WEX-WEI x86 64bit/MS Windows - 04/26/21 22:05:58 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE OptimTepla Using MIP From line 284
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS          12     SINGLE EQUATIONS          750
+BLOCKS OF VARIABLES          12     SINGLE VARIABLES        1,191
+NON ZERO ELEMENTS         3,824     DISCRETE VARIABLES        294
+
+
+GENERATION TIME      =        0.015 SECONDS      4 MB  30.1.0 re01a340 WEX-WEI
+
+
+EXECUTION TIME       =        0.015 SECONDS      4 MB  30.1.0 re01a340 WEX-WEI
+GAMS 30.1.0  re01a340 Released Jan 10, 2020 WEX-WEI x86 64bit/MS Windows - 04/26/21 22:05:58 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE OptimTepla Using MIP From line 284
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   OptimTepla          OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  284
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      8 Integer Solution          
+**** OBJECTIVE VALUE            80238.8816
+
+ RESOURCE USAGE, LIMIT          0.031      1000.000
+ ITERATION COUNT, LIMIT       284    2000000000
+
+IBM ILOG CPLEX   30.1.0 re01a340 Released Jan 10, 2020 WEI x86 64bit/MS Window
+--- GAMS/Cplex licensed for continuous and discrete problems.
+Cplex 12.10.0.0
+
+Space for names approximately 0.04 Mb
+Use option 'names no' to turn use of names off
+MIP status(102): integer optimal, tolerance
+Cplex Time: 0.03sec (det. 12.99 ticks)
+Fixing integer variables, and solving final LP...
+Fixed MIP status(1): optimal
+Cplex Time: 0.00sec (det. 1.36 ticks)
+Solution satisfies tolerances.
+
+MIP Solution:        80238.881583    (254 iterations, 0 nodes)
+Final Solve:         80238.881583    (30 iterations)
+
+Best possible:       81134.926079
+Absolute gap:          896.044497
+Relative gap:            0.011044
+
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+                           148  PROJECTED
+GAMS 30.1.0  re01a340 Released Jan 10, 2020 WEX-WEI x86 64bit/MS Windows - 04/26/21 22:05:58 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----    285 VARIABLE z.L                   =    80238.882  hodnota ucelove funkce
+
+----    285 VARIABLE x.L  vyuziti kotle typu i v case t pro scenar s
+
+                  1           2           3
+
+Bio1.1        1.000       1.000       1.000
+Bio1.2        1.000       1.000       1.000
+Bio1.3        1.000       1.000       1.000
+Bio1.12       1.000       1.000       1.000
+Bio1.13       1.000       1.000       1.000
+Bio1.14       1.000       1.000       1.000
+Bio1.15       1.000       1.000       1.000
+Bio1.16       1.000       1.000       1.000
+Bio1.17       1.000       1.000       1.000
+Bio1.18       1.000       1.000       1.000
+Bio1.19       1.000       1.000       1.000
+Bio1.20       1.000       1.000       1.000
+Bio1.21       1.000       1.000       1.000
+Bio1.22       1.000       1.000       1.000
+Bio1.23       1.000       1.000       1.000
+Bio1.24       1.000       1.000       1.000
+Bio1.39       1.000       1.000       1.000
+Bio1.40       1.000       1.000       1.000
+Bio1.41       1.000       1.000       1.000
+Bio1.42       1.000       1.000       1.000
+Bio1.43       1.000       1.000       1.000
+Bio1.44       1.000       1.000       1.000
+Bio1.45       1.000       1.000       1.000
+Bio1.46       1.000       1.000       1.000
+Bio1.47       1.000       1.000       1.000
+Bio1.48       1.000       1.000       1.000
+Bio1.49       1.000       1.000       1.000
+Bio2.1        1.000       1.000       1.000
+Bio2.2        1.000       1.000       1.000
+Bio2.3        1.000       1.000       1.000
+Bio2.5        1.000       1.000       1.000
+Bio2.6        1.000       1.000       1.000
+Bio2.7        1.000       1.000       1.000
+Bio2.8        1.000       1.000       1.000
+Bio2.9        1.000       1.000       1.000
+Bio2.10       1.000       1.000       1.000
+Bio2.11       1.000       1.000       1.000
+Bio2.12       1.000       1.000       1.000
+Bio2.13       1.000       1.000       1.000
+Bio2.14       1.000       1.000       1.000
+Bio2.15       1.000       1.000       1.000
+Bio2.16       1.000       1.000       1.000
+Bio2.17       1.000       1.000       1.000
+Bio2.18       1.000       1.000       1.000
+Bio2.19       1.000       1.000       1.000
+Bio2.20       1.000       1.000       1.000
+Bio2.21       1.000       1.000       1.000
+Bio2.22       1.000       1.000       1.000
+Bio2.23       1.000       1.000       1.000
+Bio2.24       1.000       1.000       1.000
+Bio2.25       1.000       1.000       1.000
+Bio2.26       1.000       1.000       1.000
+Bio2.27       1.000       1.000       1.000
+Bio2.28       1.000       1.000       1.000
+Bio2.29       1.000       1.000       1.000
+Bio2.30       1.000       1.000       1.000
+Bio2.31       1.000       1.000       1.000
+Bio2.32       1.000       1.000       1.000
+Bio2.33       1.000       1.000       1.000
+Bio2.34       1.000       1.000       1.000
+Bio2.35       1.000       1.000       1.000
+Bio2.36       1.000       1.000       1.000
+Bio2.37       1.000       1.000       1.000
+Bio2.38       1.000       1.000       1.000
+Bio2.39       1.000       1.000       1.000
+Bio2.40       1.000       1.000       1.000
+Bio2.41       1.000       1.000       1.000
+Bio2.42       1.000       1.000       1.000
+Bio2.43       1.000       1.000       1.000
+Bio2.44       1.000       1.000       1.000
+Bio2.45       1.000       1.000       1.000
+Bio2.46       1.000       1.000       1.000
+Bio2.47       1.000       1.000       1.000
+Bio2.49       1.000       1.000       1.000
+
+
+----    285 VARIABLE yP.L  vyuziti kotle typu j v case t pro scenar s
+
+                  1           2           3
+
+Plyn.1      913.000    1122.000
+Plyn.2      763.000     912.000
+Plyn.3      798.000     912.000
+Plyn.4     2033.000    2115.000
+Plyn.5     1307.000    1365.000
+Plyn.6     1220.000    1271.000
+Plyn.7     1226.000    1271.000
+Plyn.8     1163.000    1199.000
+Plyn.9     1173.000    1202.000
+Plyn.10    1144.000    1165.000
+Plyn.11    1152.000    1165.000
+Plyn.12     624.000     636.000
+Plyn.13     624.000     639.000
+Plyn.14     696.000     711.000
+Plyn.15     688.000     709.000
+Plyn.16     795.000     827.000
+Plyn.17     768.000     811.000
+Plyn.18     707.000     801.000
+Plyn.19     580.000     761.000
+Plyn.20     629.000     956.000
+Plyn.21     346.000     901.000
+Plyn.22      47.000     757.000
+Plyn.23                 580.000
+Plyn.24                 456.000
+Plyn.25                 836.000
+Plyn.26                 649.000
+Plyn.27                 507.000     223.795
+Plyn.28                 482.000     392.000
+Plyn.29                 364.000     392.000
+Plyn.30                 155.000     281.000
+Plyn.31                  70.000     226.000
+Plyn.32                             242.000
+Plyn.33                             332.000
+Plyn.34                             403.000
+Plyn.35                             615.000
+Plyn.36                             841.000
+Plyn.37                            1027.000
+Plyn.38                  75.472    1274.000
+Plyn.39                             841.000
+Plyn.40                             930.000
+Plyn.41      66.313                 981.000
+Plyn.42     460.000                1076.000
+Plyn.43     617.000                1089.000
+Plyn.44     838.000                1198.000
+Plyn.45     946.000                1209.000
+Plyn.46     965.000                1180.000
+Plyn.47    1009.000                1182.000
+Plyn.48    1732.000                1874.000
+Plyn.49    1015.000                1131.000
+
+
+----    285 VARIABLE yZ.L  zasobník se ztratou f
+
+             1           2           3
+
+1                              593.000
+2                             1272.770
+3                             1860.676
+4                             1200.822
+5                             1379.781
+6                             1440.612
+7                             1509.363
+8                             1584.707
+9                             1440.001
+10                            1436.001
+11                            1256.601
+12                            1534.111
+13                            1664.994
+14                            1609.195
+15                            1503.367
+16                            1279.997
+17                            1151.197
+18                            1113.054
+19                            1218.879
+20                            1102.557
+21                             939.327
+22                             814.608
+23     190.000                 682.417
+24     476.100                 717.999
+25     282.685                 346.919
+26     238.417                  30.227
+27     256.654
+28     178.122
+29     132.185
+30     175.575
+31     213.529
+32     300.312      31.000
+33     336.268      76.520
+34     449.553     160.164
+35     543.085     197.351
+36     508.914     171.536
+37     442.380      89.236
+38     115.023
+39     236.220     396.000
+40     171.236     654.560
+41                 871.286
+42                 980.732
+43                1161.466
+44                1300.778
+45                1431.700
+46                1594.213
+47                1847.618
+48                1363.857
+49                1629.278
+
+
+----    285 EQUATION omez.L  omezeni pro splneni poptavky v case t pro scenar s
+
+             1           2           3
+
+2     2063.000    2212.000     555.000
+3     2098.000    2212.000     623.000
+4     2033.000    2115.000     511.000
+5     2057.000    2115.000     511.000
+6     1970.000    2021.000     496.000
+7     1976.000    2021.000     566.000
+8     1913.000    1949.000     569.000
+9     1923.000    1952.000     657.000
+10    1894.000    1915.000     682.000
+11    1902.000    1915.000     714.000
+12    1924.000    1936.000     834.000
+13    1924.000    1939.000     939.000
+14    1996.000    2011.000    1156.000
+15    1988.000    2009.000    1261.000
+16    2095.000    2127.000    1358.000
+17    2068.000    2111.000    1288.000
+18    2007.000    2101.000    1200.000
+19    1880.000    2061.000    1094.000
+20    1929.000    2256.000    1331.000
+21    1646.000    2201.000    1364.000
+22    1347.000    2057.000    1312.000
+23    1110.000    1880.000    1310.000
+24     993.000    1756.000    1203.000
+25     872.000    1586.000    1078.000
+26     766.000    1399.000    1032.000
+27     696.000    1257.000    1001.000
+28     808.000    1232.000    1142.000
+29     771.000    1114.000    1142.000
+30     700.000     905.000    1031.000
+31     698.000     820.000     976.000
+32     644.000     719.000     992.000
+33     672.000     702.000    1082.000
+34     593.000     661.000    1153.000
+35     625.000     700.000    1365.000
+36     719.000     762.000    1591.000
+37     786.000     810.000    1777.000
+38    1011.000     904.000    2024.000
+39    1165.000     904.000    2141.000
+40    1339.000     986.000    2230.000
+41    1517.000    1044.000    2281.000
+42    1760.000    1086.000    2376.000
+43    1917.000    1031.000    2389.000
+44    2138.000    1091.000    2498.000
+45    2246.000    1039.000    2509.000
+46    2265.000     980.000    2480.000
+47    2309.000     935.000    2482.000
+48    2282.000     849.000    2424.000
+49    2315.000     830.000    2431.000
+
+
+----    285 PARAMETER Pt  celkova poptavka Pt po teple v case t scenari s
+
+             1           2           3
+
+1     2213.000    2422.000     707.000
+2     2063.000    2212.000     555.000
+3     2098.000    2212.000     623.000
+4     2033.000    2115.000     511.000
+5     2057.000    2115.000     511.000
+6     1970.000    2021.000     496.000
+7     1976.000    2021.000     566.000
+8     1913.000    1949.000     569.000
+9     1923.000    1952.000     657.000
+10    1894.000    1915.000     682.000
+11    1902.000    1915.000     714.000
+12    1924.000    1936.000     834.000
+13    1924.000    1939.000     939.000
+14    1996.000    2011.000    1156.000
+15    1988.000    2009.000    1261.000
+16    2095.000    2127.000    1358.000
+17    2068.000    2111.000    1288.000
+18    2007.000    2101.000    1200.000
+19    1880.000    2061.000    1094.000
+20    1929.000    2256.000    1331.000
+21    1646.000    2201.000    1364.000
+22    1347.000    2057.000    1312.000
+23    1110.000    1880.000    1310.000
+24     993.000    1756.000    1203.000
+25     872.000    1586.000    1078.000
+26     766.000    1399.000    1032.000
+27     696.000    1257.000    1001.000
+28     808.000    1232.000    1142.000
+29     771.000    1114.000    1142.000
+30     700.000     905.000    1031.000
+31     698.000     820.000     976.000
+32     644.000     719.000     992.000
+33     672.000     702.000    1082.000
+34     593.000     661.000    1153.000
+35     625.000     700.000    1365.000
+36     719.000     762.000    1591.000
+37     786.000     810.000    1777.000
+38    1011.000     904.000    2024.000
+39    1165.000     904.000    2141.000
+40    1339.000     986.000    2230.000
+41    1517.000    1044.000    2281.000
+42    1760.000    1086.000    2376.000
+43    1917.000    1031.000    2389.000
+44    2138.000    1091.000    2498.000
+45    2246.000    1039.000    2509.000
+46    2265.000     980.000    2480.000
+47    2309.000     935.000    2482.000
+48    2282.000     849.000    2424.000
+49    2315.000     830.000    2431.000
+
+
+----    285 PARAMETER cap  maximalni kapacita kotle typu i
+
+Bio1 550.000,    Bio2 750.000
+
+
+----    285 PARAMETER bc                   =        0.650  jednotkova cena za kWh vyrobenou biomasou
+            PARAMETER gc                   =        1.400  jednotkova cena za kWh vyrobenou plynem
+
+----    285 EQUATION delta.L  pomocne omezeni
+
+                      ( ALL       0.000 )
+
+
+----    286 PARAMETER f  nahodne generovana ztrata tepelneho zasobniku
+
+             1           2           3
+
+1        0.860       0.870       0.890
+2        0.870       0.920       0.930
+3        0.870       0.890       0.920
+4        0.930       0.910       0.950
+5        0.850       0.870       0.860
+6        0.900       0.860       0.920
+7        0.860       0.900       0.930
+8        0.900       0.900       0.850
+9        0.900       0.900       0.950
+10       0.870       0.870       0.850
+11       0.870       0.860       0.850
+12       0.930       0.910       0.850
+13       0.870       0.950       0.880
+14       0.910       0.880       0.910
+15       0.870       0.900       0.890
+16       0.930       0.900       0.890
+17       0.910       0.940       0.880
+18       0.850       0.940       0.910
+19       0.880       0.950       0.930
+20       0.860       0.950       0.910
+21       0.870       0.910       0.880
+22       0.940       0.940       0.850
+23       0.890       0.920       0.910
+24       0.850       0.930       0.940
+25       0.900       0.880       0.900
+26       0.850       0.930       0.900
+27       0.920       0.920       0.910
+28       0.860       0.950       0.920
+29       0.950       0.940       0.910
+30       0.920       0.920       0.930
+31       0.910       0.860       0.900
+32       0.860       0.920       0.870
+33       0.870       0.930       0.950
+34       0.930       0.920       0.850
+35       0.880       0.930       0.930
+36       0.940       0.870       0.900
+37       0.850       0.880       0.890
+38       0.880       0.860       0.930
+39       0.890       0.860       0.900
+40       0.880       0.940       0.860
+41       0.890       0.880       0.900
+42       0.910       0.910       0.880
+43       0.860       0.940       0.870
+44       0.940       0.900       0.860
+45       0.890       0.890       0.890
+46       0.860       0.930       0.930
+47       0.850       0.900       0.880
+48       0.940       0.850       0.920
+49       0.950       0.940       0.940
+
+
+----    286 PARAMETER zmeny  
+
+Bio1 4.000,    Bio2 4.000
+
+
+----    286 EQUATION pocetzmen.L  omezeni poctu zmen
+
+               1           2           3
+
+Bio1       4.000       4.000       4.000
+Bio2       4.000       4.000       4.000
+
+
+----    286 VARIABLE deltaxp.L  citac plus zmen
+
+                  1           2           3
+
+Bio1.12       1.000       1.000       1.000
+Bio1.39       1.000       1.000       1.000
+Bio2.5        1.000       1.000       1.000
+Bio2.49       1.000       1.000       1.000
+
+
+----    286 VARIABLE deltaxm.L  citac minus zmen
+
+                  1           2           3
+
+Bio1.4        1.000       1.000       1.000
+Bio1.25       1.000       1.000       1.000
+Bio2.4        1.000       1.000       1.000
+Bio2.48       1.000       1.000       1.000
+
+
+**** REPORT FILE SUMMARY
+
+out1 M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\tetour\original\vysledky.txt
+
+
+EXECUTION TIME       =        0.016 SECONDS      3 MB  30.1.0 re01a340 WEX-WEI
+
+
+USER: Medium MUD - 10 User License                   S170901:0725AO-GEN
+      Brno University of Technology, Dept. of Process and EnviroDC13506
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\tetour\original\2020_DP_Tetour_Daniel_177786.gms
+Output     M:\PROGRAMY\gams30.1\apifiles\Python\Diplomka\SRC\gams\tetour\original\2020_DP_Tetour_Daniel_177786.lst

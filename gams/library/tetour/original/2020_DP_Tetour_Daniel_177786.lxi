@@ -1,0 +1,19 @@
+B 3 C o m p i l a t i o n
+B 374 Model Statistics    SOLVE OptimTepla Using MIP From line 284
+B 390 Solution Report     SOLVE OptimTepla Using MIP From line 284
+B 434 E x e c u t i o n
+I 436 z
+I 437 x
+I 517 yP
+I 572 yZ
+I 627 omez
+I 681 Pt
+I 736 cap
+I 742 bc
+I 743 gc
+I 744 delta
+I 749 f
+I 804 zmeny
+I 809 pocetzmen
+I 817 deltaxp
+I 827 deltaxm
