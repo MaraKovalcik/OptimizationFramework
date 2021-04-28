@@ -272,4 +272,4 @@ Tento soubor neslouží k vysvětlení fungování celého programu, ale pouze k
 potřebných k jeho spuštění, otestování funkčnosti a demonstraci dosažených výsledků. Pro bližší pochopení fungování programu je
 třeba zjistit, jak fungují soubory *.py a *.gms. Toto bude popsáno v dokumentaci doplomové práce.
 
-Autor: Marek Kovalčík, 192168@usi.vutbr.cz, 7. 2. 2021
+Autor: Marek Kovalčík, mara.kovalcik@gmail.com, 28. 4. 2021
